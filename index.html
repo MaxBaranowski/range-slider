@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Slider</title>
+
+  <!-- jquery styles -->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <!-- font for slider from googlefonts, if not this font. then will be sans serif by default -->
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+  <!-- default juery lib -->
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <!-- jquery-ui lib -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+  <script>
+    $(function() {
+
+      // slider Kwota pożyczki
+      var money_sl = $("#slider-money");
+      // slider Na ile miesięcy
+      var months_sl = $("#slider-months");
+      // loan amount
+      var money_val = $('#value-money')[0];
+      //number of months
+      var month_val = $('#value-months')[0];
+
+      money_sl.slider({
+        range: "min",
+        animate: true,
+        // size or amount of each step
+        step: 100,
+        // min value
+        min: 1000,
+        // max value
+        max: 12000,
+        slide: function(event, ui) {
+          money_val.innerHTML = ui.value + " zl";
+        }
+      });
+
+      // slider Na ile miesięcy
+      months_sl.slider({
+        range: "min",
+        animate: true,
+        min: 4,
+        max: 24,
+        slide: function(event, ui) {
+          month_val.innerHTML = ui.value;
+        }
+      });
+
+      // ajax request
+      $('#btn-result').click(() => {
+        $.ajax({
+          type: "POST",
+          url: "",
+          data: {
+            amount: parseInt(money_val.innerHTML),
+            months: parseInt(month_val.innerHTML)
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      })
+
+    });
+  </script>
+
+  <style>
+    .slider-container * {
+      font-family: 'Nunito', sans-serif;
+      /* disable user select */
+			-moz-user-select: none;
+			-khtml-user-select: none;
+			user-select: none; 
+			cursor: default;    
+    }
+
+    .slider-container {
+      width: 700px;
+      box-sizing: border-box;
+    }
+
+    .slider-container main {
+      margin: 0 auto;
+      width: 95%;
+    }
+
+    .slider-container .slider {
+      display: inline-block;
+      margin: 0 15px;
+      width: 300px;
+      text-align: center;
+      margin: 0 auto;
+      margin-top: calc(50vh - 250px);
+    }
+
+    .slider-container #slider-money,
+    #slider-months {
+      border-radius: 100px;
+      clear: both;
+    }
+
+    .slider-container .ui-slider-range {
+      background-color: #80bf44;
+    }
+
+    .slider-container .slider .current-value {
+      margin-bottom: 10px;
+      display: block;
+      color: #666666;
+      font-size: 3em;
+      font-weight: 600;
+      line-height: 1em;
+    }
+
+    .slider-container .ui-state-default {
+      border-radius: 100px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .slider-container .ui-slider-handle.ui-corner-all.ui-state-default.ui-state-active {
+      border: 1px solid #c5c5c5;
+      background: #f6f6f6;
+    }
+
+    .slider-container .limits {
+      color: #999;
+    }
+
+    .slider-container .limits p:first-of-type {
+      display: inline-block;
+      float: left;
+      padding: 0;
+      margin: 0 0 10px 0;
+    }
+
+    .slider-container .limits p:last-of-type {
+      display: inline-block;
+      float: right;
+      padding: 0;
+      margin: 0;
+    }
+
+    .slider-container .calc-result {
+      font-size: 4em;
+      text-align: center;
+      color: #80bf44;
+      padding: 20px 0;
+      letter-spacing: -3px;
+    }
+
+    .slider-container #btn-result {
+      background-color: #80bf44;
+      color: #FFF;
+      box-shadow: 0px 5px 0px 0px #5c7f2e;
+      padding: 0.6em 2em;
+      border: 0;
+      border-radius: 0.3em;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto 50px auto;
+      height: 40px;
+      font-size: 1em;
+    }
+
+    .slider-container table {}
+youtube
+    .slider-container tr td {
+      border-bottom: 1px solid #EBEFF1;
+      color: #585A5C;
+      font-size: 14px;
+      line-height: 30px;
+      text-align: end;
+    }
+
+    .slider-container tr td:first-child {
+      width: 190px;
+    }
+
+    .slider-container tr td:last-child {
+      width: 70px;
+    }
+
+    .slider-container .outcome-results {
+      float: right;
+      color: #585A5C;
+      font-size: 13px;
+      line-height: 20px;
+      width: 410px;
+      box-sizing: border-box;
+      padding-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- container with slider -->
+  <div class="slider-container">
+    <!-- Kwota pożyczki -->
+    <main>
+      <section class="slider">
+        <p style="font-size: 1.2em;">Kwota pożyczki</p>
+        <span class="current-value" id="value-money">1000 zł</span>
+        <div class="limits">
+          <p>1000 zł</p>
+          <p>12000 zł</p>
+        </div>
+        <div id="slider-money"></div>
+      </section>
+      <!-- Na ile miesięcy? -->
+      <section class="slider">
+        <p style="font-size: 1.2em;">Na ile miesięcy?</p>
+        <span class="current-value" id="value-months">4</span>
+        <div class="limits">
+          <p>4 mies</p>
+          <p>24 mies</p>
+        </div>
+        <div id="slider-months"></div>
+      </section>
+    </main>
+
+    <div class="calc-result">
+      1200 zł/mies
+    </div>
+
+    <!-- by clicking this button sendin ajax request to url, wthats needs to be added in script -->
+    <button id="btn-result">Oblicz parametry pożyczki</button>
+
+    <!-- table with results -->
+    <table style="float: left;">
+      <tr>
+        <td><span>Opłata wstępna</span></td>
+        <td><span id="OpeningFee">306 zl</span></td>
+      </tr>
+      <tr>
+        <td><span>Całkowita kwota do zapłaty</span></td>
+        <td><span id="TotalRepayment">306 zl</span></td>
+      </tr>
+      <tr>
+        <td><span>RRSO %</span></td>
+        <td><span id="ActualYearlyInterestRate">306 zl</span></td>
+      </tr>
+    </table>
+
+    <div class="outcome-results">
+      <span>Ostateczne oprocentowanie pożyczki zależy od indywidualnej  oceny zdolności kredytowej. Przykładowa oferta jest wyliczona na podstawie średich aktualnych kosztów pożyczek udzielonych na platformie Fellow Finance. Miesięczna rata zawiera: część spłacanego kapitału, odsetki, opłatę administracyjną oraz opłatę za prowadzenia konta.</span>
+    </div>
+    <div style="clear: both;">
+
+    </div>
+  </div>
+
+
+</body>
+
+</html>
